@@ -62,14 +62,21 @@
         android:layout_toEndOf="@+id/buttonCallItem" />
 
 
-    <ListView
-        android:id="@+id/listView"
+    <!--<ListView-->
+        <!--android:id="@+id/listView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_below="@+id/buttonAddItem">-->
+
+
+    <!--</ListView>-->
+
+
+    <android.support.v7.widget.ListViewCompat
+        android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/buttonAddItem">
-
-
-    </ListView>
+        android:layout_height="240dp"
+        android:layout_below="@+id/buttonAddItem"/>
 
 
 </RelativeLayout>

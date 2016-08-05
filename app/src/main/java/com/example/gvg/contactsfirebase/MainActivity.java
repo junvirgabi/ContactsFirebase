@@ -5,10 +5,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ListViewCompat;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -45,9 +47,10 @@ public class MainActivity extends AppCompatActivity {
     private Button mUpdate;
     private Button mCall;
 
-    private ListView listcontacts;
+//    private ListView listcontacts;
+    private ListViewCompat listcontacts;
 
-    private ArrayList<Contacts> contactList;
+    private ArrayList<Contacts> contactsL;
 
     Contacts contact = new Contacts();
     String name,contactNumber;
@@ -65,12 +68,14 @@ public class MainActivity extends AppCompatActivity {
 
         mName = (EditText) findViewById(R.id.txtUsername);
         mPass = (EditText) findViewById(R.id.txtPass);
-        listcontacts = (ListView) findViewById(R.id.listView);
+//        listcontacts = (ListView) findViewById(R.id.listView);
+
+           listcontacts = (ListViewCompat) findViewById(R.id.list);
 
         conDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                contactList = new ArrayList<>();
+                contactsL = new ArrayList<>();
 
 
                 Iterable<DataSnapshot> snapshotIterable = dataSnapshot.getChildren();
@@ -78,10 +83,11 @@ public class MainActivity extends AppCompatActivity {
 
                 while (iterator.hasNext()) {
                     Contacts contacts = iterator.next().getValue(Contacts.class);
-                    contactList.add(contacts);
+                    contactsL.add(contacts);
 
 
-                    ArrayAdapter<Contacts> adapter = new ArrayAdapter<Contacts>(getApplicationContext(), android.R.layout.simple_list_item_1, contactList);
+//                    ArrayAdapter<Contacts> adapter = new ArrayAdapter<Contacts>(getApplicationContext(), android.R.layout.simple_list_item_1, contactsL);
+                    ListAdapter adapter = new Adapter(MainActivity.this,R.layout.list_view,contactsL);
                     listcontacts.setAdapter(adapter);
                 }
 //                .simple_list_item_1
@@ -151,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         public void deleteContact(Contacts contacts){
-            final Contacts verify = contacts;
+
             Query deleteQuery = conDatabaseReference.orderByChild("name").equalTo(contacts.getFriendName());
 
             deleteQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -161,24 +167,6 @@ public class MainActivity extends AppCompatActivity {
                         appleSnapshot.getRef().removeValue();
                     }
                 }
-//            deleteQuery.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    Iterable<DataSnapshot> snapshotIterator = dataSnapshot.getChildren();
-//                    Iterator<DataSnapshot> iterator= snapshotIterator.iterator();
-//
-//                    while(iterator.hasNext()){
-//                        DataSnapshot snapshot = iterator.next();
-//                        Contacts contacts = snapshot.getValue(Contacts.class);
-//
-//                        if(contacts.getFriendName().equals(verify.getFriendName())){
-//                            String key = snapshot.getKey();
-//                            conDatabaseReference.child(key).removeValue();
-//                        }
-//                    }
-//
-//
-//                }
 //
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
