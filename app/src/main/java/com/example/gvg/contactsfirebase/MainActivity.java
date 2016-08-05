@@ -108,11 +108,28 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+
         mDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 deleteContact(contact);
+            }
+        });
+
+
+        mUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                name = mName.getText().toString();
+                contactNumber = mPass.getText().toString();
+                contact.setContactNumber(contactNumber);
+                contact.setFriendName(name);
+                String key = conDatabaseReference.push().getKey();
+                Contacts contact = new Contacts(name, contactNumber);
+                conDatabaseReference.child(key).setValue(contact);
+
             }
         });
 
